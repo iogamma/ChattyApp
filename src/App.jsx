@@ -9,12 +9,14 @@ class App extends Component {
       currentUser: {username: "anonymous"},
       messages: [
         {
-          username: "Bobby Flay",
-          content: "I have a new show on Food Network!"
+          id_key   : "1",
+          username : "Bobby Flay",
+          content  : "I have a new show on Food Network!"
         },
         {
-          username: "Anonymous",
-          content: "I love your shows Bobby! Congrats!"
+          id_key   : "2",
+          username : "Anonymous",
+          content  : "I love your shows Bobby! Congrats!"
         }
       ]
     };
