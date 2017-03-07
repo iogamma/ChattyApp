@@ -6,7 +6,11 @@ class MessageList extends Component {
 
     return (
       <main className="messages">
-        <Message />
+        <div>
+          {this.props.messages.map((message) => {
+            return <div>{message.username}</div>
+          }) }
+        </div>
       </main>
     );
   }
