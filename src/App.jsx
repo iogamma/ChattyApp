@@ -5,8 +5,19 @@ import MessageList from './MessageList.jsx';
 class App extends Component {
 
   componentDidMount() {
+    let payload, newMessage;
     // Websocket
-    this.socket = new WebSocket ("ws://localhost:3001");
+    this.socket = new WebSocket("ws://localhost:3001");
+    this.socket.onmessage = (event) => {
+      payload = JSON.parse(event.data);
+      newMessage = {id: payload.id,
+                    username: payload.username,
+                    content: payload.content};
+      this.setState((prevState) => {
+        const messages = prevState.messages.concat(newMessage);
+        return {messages};
+      });
+    }
   }
 
   constructor (props) {
@@ -16,17 +27,8 @@ class App extends Component {
     this.componentDidMount = this.componentDidMount.bind(this);
     this.state = {
       currentUser   : {username: "anonymous"},
-      messages      : [{
-          id: 1,
-          username: "Bobby Flay",
-          content: "I have a new show on Food Network!"
-        },
-        {
-          id: 2,
-          username: "Anonymous",
-          content: "I love your shows Bobby! Congrats!"
-        }],
-      socket            : ws
+      messages      : [],
+      socket        : ws
     };
   }
 
@@ -44,14 +46,11 @@ class App extends Component {
     );
   }
 
-  addMessageToList(username, message) {
-    const newMessage = {id: Date.now(), username: username, content: message};
+  addMessageToList(username, content) {
+    const newMessage = {username, content};
     this.socket.send(JSON.stringify(newMessage));
-  //   const newMessage = {id: Date.now(), username: username, content: message};
-  //   this.setState((prevState) => {
-  //     const messages = prevState.messages.concat(newMessage);
-  //     return {messages};
-  //   });
   }
 }
+
+
 export default App;
