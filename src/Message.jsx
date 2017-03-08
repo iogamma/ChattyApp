@@ -1,11 +1,15 @@
 import React, {Component} from 'react';
 
 class Message extends Component {
-  render() {
 
+  componentDidMount() {
+    console.log("componentDidMount <Message />");
+  }
+
+  render() {
     return (
       <div>
-        {this.props.username} - {this.props.content}
+        {this.props.message.username} - {this.props.message.content}
       </div>
     );
   }
