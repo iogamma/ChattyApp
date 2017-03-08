@@ -27,12 +27,14 @@ class Chatbar extends Component {
                defaultValue={this.state.username}
                onBlur={this.onBlurUsername} value={this.state.username}
                onChange={this.onChangeUsername}
+               type='text'
                value={this.state.username}
         />
         <input className='chatbar-message'
                placeholder='Type a message and hit ENTER'
                onKeyDown={this.onKeyEnterMsg}
                onChange={this.onChangeMsg}
+               type='text'
                value={this.state.content}
         />
       </footer>

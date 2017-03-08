@@ -11,9 +11,9 @@ class App extends Component {
 
   constructor (props) {
     let ws;
-
     super(props);
     this.addMessageToList = this.addMessageToList.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
     this.state = {
       currentUser   : {username: "anonymous"},
       messages      : [{
@@ -46,10 +46,12 @@ class App extends Component {
 
   addMessageToList(username, message) {
     const newMessage = {id: Date.now(), username: username, content: message};
-    this.setState((prevState) => {
-      const messages = prevState.messages.concat(newMessage);
-      return {messages};
-    });
+    this.socket.send(JSON.stringify(newMessage));
+  //   const newMessage = {id: Date.now(), username: username, content: message};
+  //   this.setState((prevState) => {
+  //     const messages = prevState.messages.concat(newMessage);
+  //     return {messages};
+  //   });
   }
 }
 export default App;
