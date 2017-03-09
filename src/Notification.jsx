@@ -9,7 +9,13 @@ class Notification extends Component {
   render() {
     return (
       <div className="message system">
-        {this.props.notification.oldName} changed their name to {this.props.notification.newName}
+        <span style={{color: this.props.nameColor}}>
+          {this.props.notification.oldName}
+        </span>
+        <span>&nbsp;changed their name to&nbsp;</span>
+        <span style={{color: this.props.nameColor}}>
+          {this.props.notification.newName}
+        </span>
       </div>
     );
   }

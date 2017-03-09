@@ -58,26 +58,30 @@ class App extends Component {
     let newMessage, newUserCount, messages;
     switch(serverData.type) {
       case 'postMessage':
-        newMessage = { content  : serverData.content,
-                       id       : serverData.id,
-                       type     : 'postMessage',
-                       username : serverData.username
+        newMessage = { content     : serverData.content,
+                       id          : serverData.id,
+                       nameColor   : serverData.nameColor,
+                       type        : 'postMessage',
+                       username    : serverData.username
                      };
         this.setState((prevState) => {
           messages = prevState.messages.concat(newMessage);
           return {messages};
         });
+        // console.log(this.refs[serverData.id]);
         break;
       case 'postNotification':
-        newMessage =  { id      : serverData.id,
-                        newName : serverData.newName,
-                        oldName : serverData.oldName,
-                        type    : 'postNotification'
+        newMessage =  { id        : serverData.id,
+                        nameColor : serverData.nameColor,
+                        newName   : serverData.newName,
+                        oldName   : serverData.oldName,
+                        type      : 'postNotification'
                       };
         this.setState((prevState) => {
           messages = prevState.messages.concat(newMessage);
           return {messages};
         });
+        // console.log(this.ref[newMesage.id]);
         break;
       case 'userCountUpdate':
         newUserCount = serverData.userCount;

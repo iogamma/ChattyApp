@@ -22,9 +22,10 @@ class MessageList extends Component {
                 <Message
                   key={message.id}
                   message={{
-                    username : message.username,
-                    content  : message.content
+                    username  : message.username,
+                    content   : message.content
                   }}
+                  nameColor={message.nameColor}
                 />
               );
             case 'postNotification':
@@ -35,6 +36,7 @@ class MessageList extends Component {
                     oldName : message.oldName,
                     newName : message.newName
                   }}
+                  nameColor={message.nameColor}
                 />
               );
             default:
