@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import Message from './Message.jsx';
+import Notification from './Notification.jsx'
 
 class MessageList extends Component {
 
@@ -15,15 +16,30 @@ class MessageList extends Component {
     return (
       <main className='messages'>
         {this.props.messages.map((message) => {
-          return (
-            <Message
-              key={message.id}
-              message={{
-                username: message.username,
-                content : message.content
-              }}
-            />
-          );
+          switch(message.type) {
+            case 'postMessage':
+              return (
+                <Message
+                  key={message.id}
+                  message={{
+                    username : message.username,
+                    content  : message.content
+                  }}
+                />
+              );
+            case 'postNotification':
+              return (
+                <Notification
+                  key={message.id}
+                  notification={{
+                    oldName : message.oldName,
+                    newName : message.newName
+                  }}
+                />
+              );
+            default:
+              //TODO: ERROR HANDLING
+          }
         })}
       </main>
     );
