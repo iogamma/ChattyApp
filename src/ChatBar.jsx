@@ -68,6 +68,9 @@ class Chatbar extends Component {
   }
 
   onKeyEnterMsg(event) {
+    const imgURLregex = /(http)?s?:?(\/\/[^"']*\.(?:png|jpg|jpeg|gif|png|svg))/;
+    imgURLregex.test(event.target.value);
+    console.log(imgURLregex.test(event.target.value));
     if (event.keyCode === 13) {
       this.state.content = event.target.value;
       this.props.addMessage(this.state.username, this.state.content);

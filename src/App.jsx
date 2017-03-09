@@ -68,7 +68,6 @@ class App extends Component {
           messages = prevState.messages.concat(newMessage);
           return {messages};
         });
-        // console.log(this.refs[serverData.id]);
         break;
       case 'postNotification':
         newMessage =  { id        : serverData.id,
@@ -81,7 +80,6 @@ class App extends Component {
           messages = prevState.messages.concat(newMessage);
           return {messages};
         });
-        // console.log(this.ref[newMesage.id]);
         break;
       case 'userCountUpdate':
         newUserCount = serverData.userCount;
