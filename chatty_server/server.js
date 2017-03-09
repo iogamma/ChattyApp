@@ -3,6 +3,7 @@
 const express = require('express');
 const uuidV4 = require('uuid/v4');
 const SocketServer = require('ws');
+const randomColor = require('randomcolor');
 
 // Set the port to 3001
 const PORT = 3001;
@@ -22,19 +23,20 @@ const clients = [];
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
 wss.on('connection', (socket) => {
+  const clientColor = randomColor();
+  clients.push(socket);
+  // Broadcast to all users when a new user joins the connection
   wss.clients.forEach(function each(client) {
     if (client.readyState === SocketServer.OPEN) {
       let payload = { type      : 'userCountUpdate',
-                        userCount : (clients.length + 1)
-                      };
+                      userCount : (clients.length)
+                    };
       payload = JSON.stringify(payload);
       client.send(payload);
     }
   });
-  clients.push(socket);
 
   console.log('Client connected');
-  console.log(SocketServer);
 
   socket.on('message', (data) => {
     payload = JSON.parse(data);
@@ -43,10 +45,12 @@ wss.on('connection', (socket) => {
       case 'incomingMessage':
         payload.type = 'postMessage';
         payload.id = uuidV4();
+        payload.nameColor = clientColor;
         break;
       case 'incomingNotification':
         payload.type = 'postNotification';
         payload.id = uuidV4();
+        payload.nameColor = clientColor;
         break;
       default:
         // show error in console if message is not a known type
@@ -62,16 +66,15 @@ wss.on('connection', (socket) => {
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   socket.on('close', () => {
-    clients.forEach((client, index) => {
-      if (client === socket) {
-        clients.splice(index, 1);
-        return
-      }
-    });
+    const clientIndex = clients.indexOf(socket);
+    if(clientIndex >= 0) {
+      clients.splice(clientIndex, 1);
+    }
+
     wss.clients.forEach(function each(client) {
       if (client.readyState === SocketServer.OPEN) {
         let payload = { type      : 'userCountUpdate',
-                        userCount : (clients.length - 1)
+                        userCount : (clients.length)
                       };
         payload = JSON.stringify(payload);
         client.send(payload);
