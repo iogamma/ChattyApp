@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import Chatbar from './Chatbar.jsx';
-import MessageList from './MessageList.jsx';
-import Nav  from './Nav.jsx';
+import Chatbar            from './Chatbar.jsx';
+import MessageList        from './MessageList.jsx';
+import Nav                from './Nav.jsx';
 
 class App extends Component {
 

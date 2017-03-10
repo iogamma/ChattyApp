@@ -1,9 +1,9 @@
 // websocket server
 
-const express = require('express');
-const uuidV4 = require('uuid/v4');
+const express      = require('express');
+const uuidV4       = require('uuid/v4');
 const SocketServer = require('ws');
-const randomColor = require('randomcolor');
+const randomColor  = require('randomcolor');
 
 // Set the port to 3001
 const PORT = 3001;
@@ -84,7 +84,6 @@ wss.on('connection', (socket) => {
 });
 
 //---------- Helper Function
-
 // Broadcast to all users the user count
 function broadcastUserCount() {
   wss.clients.forEach(function each(client) {

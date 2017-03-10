@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import Message from './Message.jsx';
-import Notification from './Notification.jsx'
-import Image from './Image.jsx'
+import Message            from './Message.jsx';
+import Notification       from './Notification.jsx'
+import Image              from './Image.jsx'
 
 class MessageList extends Component {
 
