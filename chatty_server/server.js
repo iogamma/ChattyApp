@@ -39,7 +39,7 @@ wss.on('connection', (socket) => {
   console.log('Client connected');
 
   socket.on('message', (data) => {
-    payload = JSON.parse(data);
+    let payload = JSON.parse(data);
     // Prepare payload according to message type
     switch(payload.type) {
       case 'incomingMessage':
@@ -59,7 +59,7 @@ wss.on('connection', (socket) => {
         break;
       default:
         // Error handling in case of unrecognized message type
-        throw new Error(`Unknown data type at`)
+        throw new Error(`Unknown data type at ${payload.type}`);
     }
 
     payload = JSON.stringify(payload);
