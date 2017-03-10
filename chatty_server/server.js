@@ -40,7 +40,7 @@ wss.on('connection', (socket) => {
 
   socket.on('message', (data) => {
     payload = JSON.parse(data);
-
+    // Prepare payload according to message type
     switch(payload.type) {
       case 'incomingMessage':
         payload.type = 'postMessage';
@@ -52,10 +52,16 @@ wss.on('connection', (socket) => {
         payload.id = uuidV4();
         payload.nameColor = clientColor;
         break;
+      case 'incomingImage':
+        payload.type = 'postImage';
+        payload.id = uuidV4();
+        payload.nameColor = clientColor;
+        break;
       default:
-        // show error in console if message is not a known type
+        // Error handling in case of unrecognized message type
         throw new Error(`Unknown data type at`)
     }
+
     payload = JSON.stringify(payload);
     wss.clients.forEach(function each(client) {
       if (client.readyState === SocketServer.OPEN) {
@@ -67,19 +73,27 @@ wss.on('connection', (socket) => {
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   socket.on('close', () => {
     const clientIndex = clients.indexOf(socket);
+
     if(clientIndex >= 0) {
       clients.splice(clientIndex, 1);
     }
+    broadcastUserCount();
 
-    wss.clients.forEach(function each(client) {
-      if (client.readyState === SocketServer.OPEN) {
-        let payload = { type      : 'userCountUpdate',
-                        userCount : (clients.length)
-                      };
-        payload = JSON.stringify(payload);
-        client.send(payload);
-      }
-    });
-    console.log('Client disconnected')
+    console.log('Client disconnected');
   });
 });
+
+//---------- Helper Function
+
+// Broadcast to all users the user count
+function broadcastUserCount() {
+  wss.clients.forEach(function each(client) {
+    if (client.readyState === SocketServer.OPEN) {
+      let payload = { type      : 'userCountUpdate',
+                      userCount : (clients.length)
+                    };
+      payload = JSON.stringify(payload);
+      client.send(payload);
+    }
+  });
+}

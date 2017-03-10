@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import Message from './Message.jsx';
 import Notification from './Notification.jsx'
+import Image from './Image.jsx'
 
 class MessageList extends Component {
 
-  componentDidMount() {
-    console.log('componentDidMount <MessageList />');
-  }
+//-------------------- Lifecycle Methods
 
   constructor (props) {
     super(props);
@@ -39,14 +38,22 @@ class MessageList extends Component {
                   nameColor={message.nameColor}
                 />
               );
+            case 'postImage':
+              return(
+                <Image
+                  key={message.id}
+                  nameColor={message.nameColor}
+                  imageURL={message.imageURL}
+                  username={message.username}
+                />
+              );
             default:
-              //TODO: ERROR HANDLING
+              alert('Cannot render your content in MessageList');
           }
         })}
       </main>
     );
   }
 }
-
 
 export default MessageList;

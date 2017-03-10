@@ -5,6 +5,8 @@ import Nav  from './Nav.jsx';
 
 class App extends Component {
 
+  //---------- Lifecyle Methods
+
   constructor (props) {
     let ws;
     super(props);
@@ -12,21 +14,13 @@ class App extends Component {
     this.addNotification = this.addNotification.bind(this);
     this.componentDidMount = this.componentDidMount.bind(this);
     this.setServerData = this.setServerData.bind(this);
+    this.addImage = this.addImage.bind(this);
     this.state = {
-      currentUser   : {username: "anonymous"},
-      messages      : [],
-      numOfUsers    : 0,
-      socket        : ws
+      currentUser : {username: 'anonymous'},
+      messages    : [],
+      numOfUsers  : 0,
+      socket      : ws
     };
-  }
-
-  componentDidMount() {
-    // Websocket
-    this.socket = new WebSocket("ws://localhost:3001");
-    this.socket.onmessage = (event) => {
-      let serverData = JSON.parse(event.data);
-      this.setServerData(serverData);
-    }
   }
 
   render() {
@@ -37,56 +31,64 @@ class App extends Component {
         <Chatbar currUsername={this.state.currentUser.username}
                  addMessage={this.addMessage}
                  addNotification={this.addNotification}
+                 addImage={this.addImage}
         />
       </div>
     );
   }
 
+  componentDidMount() {
+    // Create a websocket connection
+    this.socket = new WebSocket('ws://localhost:3001');
+    // Socket event listener definition
+    this.socket.onmessage = (event) => {
+      let serverData = JSON.parse(event.data);
+      this.setServerData(serverData);
+    }
+  }
+
+  //---------- Property Methods
+
   addMessage(username, content) {
-    const newMessage = {username, content};
-    newMessage.type = "incomingMessage";
+    const newMessage = {
+      content  : content,
+      type     : 'incomingMessage',
+      username : username
+    };
     this.socket.send(JSON.stringify(newMessage));
   }
 
   addNotification(oldName, newName) {
-    const newNotification = {oldName, newName};
-    newNotification.type = "incomingNotification";
-    this.socket.send(JSON.stringify(newNotification));
+    const newMessage = {
+      newName : newName,
+      oldName : oldName,
+      type    : 'incomingNotification'
+    };
+    this.socket.send(JSON.stringify(newMessage));
   }
 
+  addImage(username, imageURL) {
+    const newMessage = {
+      imageURL : imageURL,
+      type     : 'incomingImage',
+      username : username
+    };
+    this.socket.send(JSON.stringify(newMessage));
+  }
+
+  //--------- Helper Methods
+
   setServerData(serverData) {
-    let newMessage, newUserCount, messages;
+    let messages;
     switch(serverData.type) {
-      case 'postMessage':
-        newMessage = { content     : serverData.content,
-                       id          : serverData.id,
-                       nameColor   : serverData.nameColor,
-                       type        : 'postMessage',
-                       username    : serverData.username
-                     };
-        this.setState((prevState) => {
-          messages = prevState.messages.concat(newMessage);
-          return {messages};
-        });
-        break;
-      case 'postNotification':
-        newMessage =  { id        : serverData.id,
-                        nameColor : serverData.nameColor,
-                        newName   : serverData.newName,
-                        oldName   : serverData.oldName,
-                        type      : 'postNotification'
-                      };
-        this.setState((prevState) => {
-          messages = prevState.messages.concat(newMessage);
-          return {messages};
-        });
-        break;
       case 'userCountUpdate':
-        newUserCount = serverData.userCount;
-        this.setState({numOfUsers: newUserCount});
+        this.setState({numOfUsers: serverData.userCount})
         break;
       default:
-        throw new Error(`Unknown datatype returned from server ${serverData.type}`);
+        this.setState((prevState) => {
+          messages = prevState.messages.concat(serverData);
+          return {messages};
+        });
     }
   }
 }
