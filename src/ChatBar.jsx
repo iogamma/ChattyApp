@@ -23,7 +23,7 @@ class Chatbar extends Component {
       <footer className='chatbar'>
         <input className='chatbar-username'
                onBlur={this.onBlurUsername}
-               onKeyDown={this.onKeyEnterUsername} value={this.state.username}
+               onKeyDown={this.onKeyEnterUsername} 
                onChange={this.onChangeUsername}
                placeholder='Your Name (Optional)'
                type='text'
